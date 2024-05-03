@@ -6,8 +6,8 @@ from Crypto.Cipher import AES
 import sys
 
 
-AES_KEY = b'+\x93\xd2\xa42\xf8\xa7\xbeE\xeeX\xee\xa3j\xac)'
-SECRET_KEY = "DZZ46UNLJNFMCUAZM6PBIDBNQBVU6LLG"
+AES_KEY = 
+SECRET_KEY = " "
 
 
 # ---------------------------- AUTHENTICATE OTP ------------------------------- #
