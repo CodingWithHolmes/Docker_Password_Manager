@@ -31,7 +31,7 @@ This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.p
 - When you first run the program you will notice a TKinter GUI asking you for a 6-digit auth code
 - You can find this code in the Google authenticator app, enter the 6 digits and hit the 'login' button
 - You will then be in the main fuction of the app, input a website name, email, and password (you can also generate a password) 
-- Hit the 'add' button to add the website info, this will encrypt and store the info in the Data directory with a file name as '<website>.bin'
+- Hit the 'add' button to add the website info, this will encrypt and store the info in the Data directory with a file name as '(website_name).bin'
 - To search up a website you have stored, type out the website name and select the search button
 
 
