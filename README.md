@@ -19,7 +19,7 @@ python -m pip install git+https://gitlab.com/drj11/pypng@pypng-0.20220715.0
 ```
 
 ### First Time Setup
-This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.py creates and stores your encryption and Goole OTP keys. It also generates a QR code to scan to set up your login with Google OTP.
+This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.py creates and stores your encryption and Google OTP keys. It also generates a QR code to scan to set up your login with Google OTP.
 - After pulling or downloading the repo, and installing the packages in requirements.txt, run FirstTimeSetup.py.
 - You will see a TKinter GUI appear with a QR code, scan that QR code with the Google Authenticator app, once you have done that, hit the "finished" button to close the program
 - TIP: You can change the name that displays in the Google auth app by editing the 'name' and 'issuer_name' kwargs in line 36 of FirstTimeSetup.py (you will need to re-run FirstTimeSetup.py if you have already ran it to update the values) 
