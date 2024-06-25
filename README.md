@@ -4,47 +4,37 @@ The password manager uses OTP with Google auth for login, and securely encrypts 
 
 As of right now, the code works as a secure local password manager. If you are wanting to use the code in its current state, follow the set up instructions below.
 
-Currently a WIP, final product will be a standalone application available on Windows, MacOS, and Linux.
+I will be making a terminal based version of this to release as a docker image in the next coming weeks. Will update/add it here when that is finished.
 
-## SET UP INSTRUCTIONS (May 2nd, 2024)
+## SET UP INSTRUCTIONS (June 25th, 2024)
 
 ### Required softwware
 - [Google Authenticator](https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?pli=1) (App or exstension, both work).
-- [Node.js](https://nodejs.org/en/download) with npm installed (for QR code generation).
 
-### OTP Setup
-- Download or install the Google Authenticator app or exstension.
-- On line 7 of [otptesting.py](/otptesting.py) change the "name" and "issuer_name" of the provisioning_uri to whatever you want. "name" is the email displayed in Google auth and "issuer_name" is the name of the application using the OTP code.
-- Run otptesting.py and copy the "testingkey" and "provisioning_uri" to a text editor.
-- IMPORTANT: put quotation marks around the ampersand symbol in the provisioning_uri ("&") or the QR code will not generate properly.
-- Install node.js and npm if you haven't already.
-- Open up the terminal, navigate to your project directory, and run the following command:
+### Package Installation Help
+This program uses several Python packages to run, while most are straight forward installs you can find in requirements.txt, you can have an issue with the pypng module. If installing that package is not working, run the following command. 
+
 ```
-qrcode -o out.png "provisioning_uri that you copied"
+python -m pip install git+https://gitlab.com/drj11/pypng@pypng-0.20220715.0
 ```
-- This will generate a QR code in out.png which you can find in the project directory.
-- Scan the QR code with the Google auth app on your mobile device or with the Google auth chrome exstension.
-- If done properly, you should see a new OTP set up with the issuer_name and name you chose.
 
-### Excryption Key Setup
-- Navigate to the [ciphertesting.py](/ciphertesting.py) file in the project directory.
-- Run the file and copy the aes_key to a text editor.
+### First Time Setup
+This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.py creates and stores your encryption and Goole OTP keys. It also generates a QR code to scan to set up your login with Google OTP.
+- After pulling or downloading the repo, and installing the packages in required.txt, run FirstTimeSetup.py.
+- You will see a TKinter GUI appear with a QR code, scan that QR code with the Google Authenticator app, once you have done that, hit the "finished" button to close the program
+- TIP: You can change the name that displays in the Google auth app by editing the 'name' and 'issuer_name' kwargs in line 36 of FirstTimeSetup.py (you will need to re-run FirstTimeSetup.py if you have already ran it to update the values) 
+- Once the programs has closed, you'll notice a keys.json file has been created in the Data directory of the project. Do not edit the values in keys.json or it will prevent you from logging in properly or encrypting the data
 
-### Final Steps
-- In [main.py](/main.py) there will be two empty global variables: 'AES_KEY' & 'SECRET_KEY' (found on lines 9 & 10). 
-- Change the value of AES_KEY to the aes_key you copied when you ran ciphertesting.py.
-- Change the value of SECRET_KEY to the testingkey you copied when you ran otptesting.py.
-- You can now run the program and use it as a password manager!
-- When you run it, you will get a window asking for a 6-digit auth code, this is the code found in your Google auth app, after entering this code hit "submit" and this will 'log in' to the password manager.
 
+### Main 
+- After running the FirstTimeSetup.py file, you can run main.py. You will only need to use main.py from here on out. 
+- When you first run the program you will notice a TKinter GUI asking you for a 6-digit auth code
+- You can find this code in the Google authenticator app, enter the 6 digits and hit the 'login' button
+- You will then be in the main fuction of the app, input a website name, email, and password (you can also generate a password) 
+- Hit the 'add' button to add the website info, this will encrypt and store the info in the Data directory with a file name as '<website>.bin'
+- To search up a website you have stored, type out the website name and select the search button
 
 
 ### To Do:
-
-- OTP setup guide on application
-
-packaging (test on all OS)
-- py2exe
-- py2dmg
-- py2deb
+- Terminal based version to release as a docker image (docker does NOT like tkinter and after hours of troubleshooting I have determined it would be easiest to build out a CLI version of this as a docker image rather than coming up with 3 sets of solutions and instructions for running TKinter in Docker on Windows, MacOS, and Linux) 
 
