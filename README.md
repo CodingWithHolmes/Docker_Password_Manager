@@ -23,7 +23,7 @@ This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.p
 - After pulling or downloading the repo, and installing the packages in requirements.txt, run FirstTimeSetup.py.
 - You will see a TKinter GUI appear with a QR code, scan that QR code with the Google Authenticator app, once you have done that, hit the "finished" button to close the program
 - TIP: You can change the name that displays in the Google auth app by editing the 'name' and 'issuer_name' kwargs in line 36 of FirstTimeSetup.py (you will need to re-run FirstTimeSetup.py if you have already ran it to update the values) 
-- Once the programs has closed, you'll notice a keys.json file has been created in the Data directory of the project. Do not edit the values in keys.json or it will prevent you from logging in properly or encrypting the data
+- Once the program has closed, you'll notice a keys.json file has been created in the Data directory of the project. Do not edit the values in keys.json or it will prevent you from logging in properly or encrypting the data
 
 
 ### Main 
