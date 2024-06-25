@@ -1,6 +1,6 @@
 # Local Password Manager
 
-This is a simple password manager built on Python and TKinter that uses OTP with Google auth for login, and securely encrypts stored info with the Crypto.Cipher package and decrypts the info to display to user when requested.
+This is a simple password manager built on Python and TKinter that uses OTP with Google auth for login, securely encrypts stored info with the Crypto.Cipher package, and decrypts the info to display to user when requested.
 
 As of right now, the code works as a secure local password manager. If you are wanting to use the code in its current state, follow the set up instructions below.
 
