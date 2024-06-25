@@ -12,7 +12,7 @@ I will be making a terminal based version of this to release as a docker image i
 - [Google Authenticator](https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?pli=1) (App or exstension, both work).
 
 ### Package Installation Help
-This program uses several Python packages to run, while most are straight forward installs you can find in requirements.txt, you can have an issue with the pypng module. If installing that package is not working, run the following command. 
+This program uses several Python packages to run, while most are straight forward installs you can find in requirements.txt, there are sometimes issues with the pypng module. If installing that package is not working, run the following command. 
 
 ```
 python -m pip install git+https://gitlab.com/drj11/pypng@pypng-0.20220715.0
@@ -20,7 +20,7 @@ python -m pip install git+https://gitlab.com/drj11/pypng@pypng-0.20220715.0
 
 ### First Time Setup
 This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.py creates and stores your encryption and Goole OTP keys. It also generates a QR code to scan to set up your login with Google OTP.
-- After pulling or downloading the repo, and installing the packages in required.txt, run FirstTimeSetup.py.
+- After pulling or downloading the repo, and installing the packages in requirements.txt, run FirstTimeSetup.py.
 - You will see a TKinter GUI appear with a QR code, scan that QR code with the Google Authenticator app, once you have done that, hit the "finished" button to close the program
 - TIP: You can change the name that displays in the Google auth app by editing the 'name' and 'issuer_name' kwargs in line 36 of FirstTimeSetup.py (you will need to re-run FirstTimeSetup.py if you have already ran it to update the values) 
 - Once the programs has closed, you'll notice a keys.json file has been created in the Data directory of the project. Do not edit the values in keys.json or it will prevent you from logging in properly or encrypting the data
