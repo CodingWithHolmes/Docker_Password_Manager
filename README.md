@@ -1,6 +1,6 @@
 # Local Password Manager
 
-This is a simple password manager built on Python and TKinter that uses OTP with Google auth for login, securely encrypts stored info with the Crypto.Cipher package, and decrypts the info to display to user when requested.
+This is an easy to set up and user-friendly password manager built on Python and TKinter that uses OTP with Google auth for login, securely encrypts stored info with the Crypto.Cipher package, and decrypts the info to display to user when requested.
 
 As of right now, the code works as a secure local password manager. If you are wanting to use the code in its current state, follow the set up instructions below.
 
@@ -23,7 +23,7 @@ This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.p
 - After pulling or downloading the repo, and installing the packages in requirements.txt, run FirstTimeSetup.py.
 - You will see a TKinter GUI appear with a QR code, scan that QR code with the Google Authenticator app, once you have done that, hit the "finished" button to close the program
 - TIP: You can change the name that displays in the Google auth app by editing the 'name' and 'issuer_name' kwargs in line 36 of FirstTimeSetup.py (you will need to re-run FirstTimeSetup.py if you have already ran it to update the values) 
-- Once the program has closed, you'll notice a keys.json file has been created in the Data directory of the project. Do not edit the values in keys.json or it will prevent you from logging in properly or encrypting the data
+- Once the program has closed, you'll notice a keys.json file has been created in the C:/LPMData directory of the project. Do not edit the values in keys.json or it will prevent you from logging in properly or encrypting the data
 
 
 ### Main 
@@ -31,7 +31,7 @@ This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.p
 - When you first run the program you will notice a TKinter GUI asking you for a 6-digit auth code
 - You can find this code in the Google authenticator app, enter the 6 digits and hit the 'login' button
 - You will then be in the main fuction of the app, input a website name, email, and password (you can also generate a password) 
-- Hit the 'add' button to add the website info, this will encrypt and store the info in the Data directory with a file name as '(website_name).bin'
+- Hit the 'add' button to add the website info, this will encrypt and store the info in the C:/LPMData directory with a file name as '(website_name).bin'
 - To search up a website you have stored, type out the website name and select the search button
 
 
