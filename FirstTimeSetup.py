@@ -4,6 +4,7 @@ import pyotp
 from Crypto.Random import get_random_bytes
 import json
 import pyqrcode
+import os
 
 # ---------------------------- FIRST TIME SETUP ------------------------------- #
 """
@@ -28,7 +29,7 @@ def first_time_setup():
     key_list.append(otpkey)
 
     keys["keys"] = key_list
-    with open('Data/keys.json', 'w') as out_file:
+    with open('LPMData/keys.json', 'w') as out_file:
         json.dump(keys, out_file, indent=4)
 
     # QR code generation to use to set up Google OTP
@@ -59,5 +60,8 @@ def first_time_setup():
 
     qrcode_window()
 
-
+directory = "LPMData"
+parent_dir = "C:/"
+path = os.path.join(parent_dir, directory)
+os.mkdir(path)
 first_time_setup()
