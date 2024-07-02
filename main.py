@@ -51,7 +51,7 @@ def main_ui():
             ciphertext, tag = cipher.encrypt_and_digest(encrypted_password)
             assert len(cipher.nonce) == 15
 
-            with open(f"Data/{website}.bin", "wb") as encrypted_file:
+            with open(f"LPMData/{website}.bin", "wb") as encrypted_file:
                 encrypted_file.write(tag)
                 encrypted_file.write(cipher.nonce)
                 encrypted_file.write(ciphertext)
@@ -65,7 +65,7 @@ def main_ui():
         website = website_entry.get().title()
 
         try:
-            with open(f"Data/{website}.bin", "rb") as decrypted_file:
+            with open(f"LPMData/{website}.bin", "rb") as decrypted_file:
                 tag = decrypted_file.read(16)
                 nonce = decrypted_file.read(15)
                 ciphertext = decrypted_file.read()
