@@ -6,6 +6,8 @@ As of right now, the code works as a secure local password manager. If you are w
 
 I will be making a terminal based version of this to release as a docker image in the next coming weeks. Will update/add it here when that is finished.
 
+If you are curious about how this project was made, I livestreamed around 95% of it, check it out on my [Twitch](https://www.twitch.tv/codingwithholmes)!
+
 ## SET UP INSTRUCTIONS (June 25th, 2024)
 
 ### Required softwware
