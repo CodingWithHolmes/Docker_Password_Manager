@@ -1,14 +1,12 @@
-# Local Password Manager
+# Password Manager
 
-This is an easy to set up and user-friendly password manager built on Python and TKinter that uses OTP with Google auth for login, securely encrypts stored info with the Crypto.Cipher package, and decrypts the info to display to user when requested.
+This is an easy to set up and user-friendly password manager built on Python that uses TOTP for login, securely encrypts stored info with the Crypto.Cipher package, and decrypts the info to display to user when requested.
 
-As of right now, the code works as a secure local password manager. If you are wanting to use the code in its current state, follow the set up instructions below.
-
-I will be making a terminal based version of this to release as a docker image in the next coming weeks. Will update/add it here when that is finished.
+As of right now, the code is set up for use in a docker container, follow the set up instructions below.
 
 If you are curious about how this project was made, I livestreamed around 95% of it, check it out on my [Twitch](https://www.twitch.tv/codingwithholmes)!
 
-## SET UP INSTRUCTIONS (June 25th, 2024)
+## SET UP INSTRUCTIONS (Dec 4th, 2024)
 
 ### Required softwware
 - [Google Authenticator](https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?pli=1) (App or exstension, both work).
@@ -35,8 +33,4 @@ This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.p
 - You will then be in the main fuction of the app, input a website name, email, and password (you can also generate a password) 
 - Hit the 'add' button to add the website info, this will encrypt and store the info in the C:/LPMData directory with a file name as '(website_name).bin'
 - To search up a website you have stored, type out the website name and select the search button
-
-
-### To Do:
-- Terminal based version to release as a docker image (docker does NOT like tkinter and after hours of troubleshooting I have determined it would be easiest to build out a CLI version of this as a docker image rather than coming up with 3 sets of solutions and instructions for running TKinter in Docker on Windows, MacOS, and Linux) 
 
