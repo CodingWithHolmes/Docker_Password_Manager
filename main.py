@@ -1,71 +1,73 @@
-from tkinter import messagebox, ttk
-from tkinter import *
-from random import *
 import pyotp
+from Crypto.Random import get_random_bytes
+import json
+import pyqrcode
+import time
 from Crypto.Cipher import AES
 import sys
-import json
+
+
+# ---------------------------- FIRST TIME SETUP SCRIPT ------------------------------- #
+def first_time_setup():
+    # Generate the keys needed for the app
+    otpkey = pyotp.random_base32()
+    aes_key = get_random_bytes(16)
+    aes_key_str = aes_key.decode("utf-16")
+
+    print("Creating QR code for Google OTP setup")
+    print("Please do not resize this window until you have scanned the QR code")
+    print("-" * 50)  # Add a separator line
+    time.sleep(3)
+    
+    # QR code generation
+    provisioning_uri = pyotp.totp.TOTP(otpkey).provisioning_uri(name='TerminalAdmin', issuer_name='Docker LPM')
+    qr_code = pyqrcode.create(provisioning_uri)
+    
+    # Generate QR code with consistent formatting
+    qr_terminal = qr_code.terminal(module_color=5, background=123, quiet_zone=1)
+    
+    # Add top and bottom borders to help maintain shape
+    border = "+" + "-" * (len(qr_terminal.split("\n")[0])) + "+"
+    print(border)
+    print(qr_terminal)
+    print(border)
+    print("-" * 50)  # Add a separator line
+    print("Please scan the above QR code with the Google authenticator app")
+    
+    set_up_finished = False
+    while not set_up_finished:
+        user_response = input("Type 'Y' when you have scanned the QR code: ").upper()
+        if user_response == "Y":
+            # Only create and save keys.json after confirmation
+            keys = {}
+            key_list = [aes_key_str, otpkey]
+            keys["keys"] = key_list
+            
+            with open('/app/data/keys.json', 'w') as out_file:
+                json.dump(keys, out_file, indent=4)
+                
+            print("Your OTP and Encryption keys have been created and stored in keys.json, do NOT modify these values")
+            print("Setup complete, closing program, re-run the program to start up the password manager")
+            time.sleep(4)
+            sys.exit(0)
+        else:
+            print("Please scan the QR code and type 'Y' to continue")
 
 
 # ---------------------------- MAIN WINDOW ------------------------------- #
-def main_ui():
-    # ---------------------------- PASSWORD GENERATOR ------------------------------- #
-    def generate_pw():
-        # feel to change the amount in each of the "nr_XXXXXXX" lines to lengthen/shorten generated passwords
-        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                   'u', 'v',
-                   'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                   'Q', 'R',
-                   'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+def password_manager():
+    using_app = True
 
-        nr_letters = randint(8, 10)
-        nr_symbols = randint(2, 4)
-        nr_numbers = randint(2, 4)
-
-        char_list = [choice(letters) for _ in range(nr_letters)]
-        sym_list = [choice(symbols) for _ in range(nr_symbols)]
-        num_list = [choice(numbers) for _ in range(nr_numbers)]
-
-        password_list = char_list + sym_list + num_list
-        shuffle(password_list)
-
-        password = "".join(password_list)
-        password_entry.delete(0, END)
-        password_entry.insert(0, password)
-
-    # ---------------------------- SAVE PASSWORD ------------------------------- #
-    def store_password():
-        # Takes the data in the input fields and encrypts it into a .bin file
-
-        website = website_entry.get().title()
-        email = email_entry.get()
-        password = password_entry.get()
-
-        if len(website) == 0 or len(password) == 0:
-            messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
-        else:
-            encrypted_password = f'Email: {email} \nPassword: {password}'.encode()
-            cipher = AES.new(AES_KEY, AES.MODE_OCB)
-            ciphertext, tag = cipher.encrypt_and_digest(encrypted_password)
-            assert len(cipher.nonce) == 15
-
-            with open(f"LPMData/{website}.bin", "wb") as encrypted_file:
-                encrypted_file.write(tag)
-                encrypted_file.write(cipher.nonce)
-                encrypted_file.write(ciphertext)
-
-            website_entry.delete(0, END)
-            password_entry.delete(0, END)
-
-    # ---------------------------- FIND PASSWORD ------------------------------- #
-    def find_password():
-        # Pulls the data from the website field and uses the AES Key to decrypt the correlating .bin file
-        website = website_entry.get().title()
+    # ---------------------------- MAIN ------------------------------- #
+    print("Welcome! Put in a website name, type 'Exit' to close the password manager")
+    while using_app:
+        website_name = input("Website name: ").title()
+        if website_name.lower() == 'exit':
+            print("Closing password manager")
+            sys.exit(0)  # Using sys.exit(0) for clean exit
 
         try:
-            with open(f"LPMData/{website}.bin", "rb") as decrypted_file:
+            with open(f"/app/data/{website_name}.bin", "rb") as decrypted_file:
                 tag = decrypted_file.read(16)
                 nonce = decrypted_file.read(15)
                 ciphertext = decrypted_file.read()
@@ -77,91 +79,78 @@ def main_ui():
                     print("The message was modified!")
                     sys.exit(1)
 
-                messagebox.showinfo(title=website, message=message.decode())
+                print(f"Existing info for {website_name} has been found, listing below")
+                print(message.decode())
+                
+                # Add update option
+                while True:
+                    update_choice = input("Would you like to update this entry? (Y/N): ").lower()
+                    if update_choice == 'y':
+                        email = input(f"Put in your new email/username for {website_name}: ")
+                        password = input(f"Put in your new password for {website_name}: ")
+
+                        encrypted_password = f'Email: {email} \nPassword: {password}'.encode()
+                        cipher = AES.new(AES_KEY, AES.MODE_OCB)
+                        ciphertext, tag = cipher.encrypt_and_digest(encrypted_password)
+                        assert len(cipher.nonce) == 15
+
+                        with open(f"/app/data/{website_name}.bin", "wb") as encrypted_file:
+                            encrypted_file.write(tag)
+                            encrypted_file.write(cipher.nonce)
+                            encrypted_file.write(ciphertext)
+                        print(f"Entry for {website_name} has been updated")
+                        break
+                    elif update_choice == 'n':
+                        break
+                    else:
+                        print("Invalid input. Please type 'Y' or 'N'")
+
         except FileNotFoundError:
-            messagebox.showinfo(title="Error",
-                                message="No data file found.\nPlease add an entry to create the data file.")
+            print("No existing data found for this website")
+            while True:
+                user_choice = input("Would you like to add login info? (Y/N): ").lower()
+                if user_choice == 'n':
+                    break
+                elif user_choice == 'y':
+                    email = input(f"Put in your email/username for {website_name}: ")
+                    password = input(f"Put in your password for {website_name}: ")
 
-    # ---------------------------- MAIN TKINTER UI ------------------------------- #
+                    encrypted_password = f'Email: {email} \nPassword: {password}'.encode()
+                    cipher = AES.new(AES_KEY, AES.MODE_OCB)
+                    ciphertext, tag = cipher.encrypt_and_digest(encrypted_password)
+                    assert len(cipher.nonce) == 15
 
-    window = Tk()
-    window.title("Local Password Manager")
-    window.config(padx=20, pady=20)
-
-    # Logo setup
-    img = PhotoImage(file="logo.png")
-    canvas = Canvas(width=200, height=200)
-    canvas.create_image(100, 100, image=img)
-    canvas.grid(row=0, column=1)
-
-    # Widget Setup
-    website_label = ttk.Label(text="Website:")
-    website_label.grid(row=1, column=0)
-
-    website_entry = ttk.Entry(width=20)
-    website_entry.grid(row=1, column=1)
-
-    email_label = ttk.Label(text="Email/Username:")
-    email_label.grid(row=2, column=0)
-
-    email_entry = ttk.Entry(width=40)
-    email_entry.grid(row=2, column=1, columnspan=2)
-
-    password_label = ttk.Label(text="Password:")
-    password_label.grid(row=3, column=0)
-
-    password_entry = ttk.Entry(width=20)
-    password_entry.grid(row=3, column=1)
-
-    password_button = ttk.Button(text="Generate Password", command=generate_pw)
-    password_button.grid(row=3, column=2)
-
-    add_button = ttk.Button(text="Add", width=20, command=store_password)
-    add_button.grid(row=4, column=1)
-
-    search_button = ttk.Button(text="Search", command=find_password)
-    search_button.grid(row=2, column=3)
-
-    exit_button = ttk.Button(text="Exit", command=window.destroy)
-    exit_button.grid(row=5, column=1)
-
-    window.mainloop()
+                    with open(f"/app/data/{website_name}.bin", "wb") as encrypted_file:
+                        encrypted_file.write(tag)
+                        encrypted_file.write(cipher.nonce)
+                        encrypted_file.write(ciphertext)
+                    break
+                else:
+                    print("Invalid input. Please type 'Y', 'N'")
 
 
-# ---------------------------- LOGIN WINDOW ------------------------------- #
-def login_ui():
-    # ---------------------------- AUTHENTICATE OTP ------------------------------- #
-    def authenticate_otp_code():
-        # Authenticates 6 digit google auth code
-        totp = pyotp.TOTP(SECRET_KEY)
-        otp_code = otp_entry.get()
+# ---------------------------- AUTHENTICATE OTP ------------------------------- #
+def authenticate_otp_code():
+    logged_in = False
+    totp = pyotp.TOTP(SECRET_KEY)
+    while not logged_in:
+        otp_code = input("Input the 6-digit code in the Google Authenticator app: ")
         if otp_code == totp.now():
-            login_window.destroy()
-            main_ui()
+            print("Authentication correct, starting password manager...")
+            time.sleep(1)
+            password_manager()
         else:
-            messagebox.showinfo(title="Error", message="Wrong code")
-
-    # ---------------------------- LOGIN TKINTER UI ------------------------------- #
-
-    login_window = Tk()
-    login_window.title("Local Password Manager")
-    login_window.config(padx=20, pady=20)
-
-    # Widget Setup
-    otp_label = ttk.Label(text="Please Input your 6 digit auth code below")
-    otp_label.grid(row=0, column=0)
-
-    otp_entry = ttk.Entry(width=20)
-    otp_entry.grid(row=1, column=0)
-
-    otp_button = ttk.Button(text="Login", command=authenticate_otp_code)
-    otp_button.grid(row=2, column=0)
-
-    login_window.mainloop()
+            print("Error: Code is not correct")
 
 
-f = open("Data/keys.json")
-data = json.load(f)
-AES_KEY = bytes(data['keys'][0], 'utf-8')
-SECRET_KEY = data['keys'][1]
-login_ui()
+try:
+    f = open("/app/data/keys.json")
+    print("keys.json found, starting password manager")
+    data = json.load(f)
+    AES_KEY = bytes(data['keys'][0], 'utf-8')
+    print(type(AES_KEY))
+    SECRET_KEY = data['keys'][1]
+    authenticate_otp_code()
+except FileNotFoundError:
+    print("No keys.json file found running first time setup script")
+    first_time_setup()
