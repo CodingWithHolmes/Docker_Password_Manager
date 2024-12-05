@@ -10,6 +10,7 @@ If you are curious about how this project was made, I livestreamed around 95% of
 
 ### Required softwware
 - [Google Authenticator](https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?pli=1) (App or exstension, both work).
+- [Docker](https://www.docker.com/)
 
 ### Package Installation Help
 This program uses several Python packages to run, while most are straight forward installs you can find in requirements.txt, there are sometimes issues with the pypng module. If installing that package is not working, run the following command. 
@@ -34,3 +35,4 @@ This program has 2 python files, FirstTimeSetup.py and main.py, FirstTimeSetup.p
 - Hit the 'add' button to add the website info, this will encrypt and store the info in the C:/LPMData directory with a file name as '(website_name).bin'
 - To search up a website you have stored, type out the website name and select the search button
 
+-
