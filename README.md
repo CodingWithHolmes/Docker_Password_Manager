@@ -40,5 +40,6 @@ Once you have successfully scanned the QR code, the program will close on it's o
 
 ### Using the Password Manager
 After you have gone through the QR code and TOTP set up, you will be prompted to put in your 6-digit code to login. After logging in, you will be promtped to type in a website name. I usually type in things like 'Amazon' or 'bank', it's not super important as the website name is used just as a reference for retriving the info later. 
+
 After typing a website name, the program will check to see if an entry for that website already exists, if not, you will be prompted to put in an email/password. If it does exist, it will show you the current username/password and then ask if you want to change it.
 To close the program, type 'exit' as the website name. 
