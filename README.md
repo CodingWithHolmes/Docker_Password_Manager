@@ -14,7 +14,7 @@ If you are curious about how this project was made, I livestreamed around 95% of
 
 
 - Download the .zip and extract the Docker_Password_Manager_Master folder in a location of your choice
-- Navigate the directory of that folder in a CLI instance
+- Navigate the directory of that folder in a terminal window
 - Run the following commands
 
 ```
